@@ -13,6 +13,7 @@ class TestAccessibility:
     @pytest.mark.accessibility
     @pytest.mark.smoke
     def test_accessibility_inventory_page(self, login, setup: Page):
+        """Test to check accessibility on the inventory page using axe-core."""
         page = setup
         self._check_accessibility(page, page.url)
 
@@ -21,6 +22,7 @@ class TestAccessibility:
     @pytest.mark.accessibility
     @pytest.mark.regression
     def test_accessibility_cart_page(self, login, setup: Page):
+        """Test to check accessibility on the cart page using axe-core."""
         page = setup
         inventory_page = InventoryPage(page)
         inventory_page.go_to_cart()  # Navigate to Cart page
@@ -31,6 +33,7 @@ class TestAccessibility:
     @pytest.mark.accessibility
     @pytest.mark.regression
     def test_accessibility_checkout_page(self, login, setup: Page):
+        """Test to check accessibility on the checkout page using axe-core."""
         page = setup
         inventory_page = InventoryPage(page)
         cart_page = CartPage(page)
@@ -66,6 +69,7 @@ class TestAccessibility:
 
     @staticmethod
     def _inject_axe(page: Page):
+        """Function to inject the axe-core library into the webpage for accessibility testing."""
         page.evaluate("""() => {
             return new Promise((resolve) => {
                 const script = document.createElement('script');

@@ -13,6 +13,9 @@ class TestFunctional:
     @pytest.mark.regression
     @pytest.mark.smoke
     def test_verify_za_sorting(self, setup):
+        """
+        Test to verify that items are sorted in Z-A order on the inventory page.
+        """
         page = setup
         login_page = LoginPage(page)
         inventory_page = InventoryPage(page)
@@ -35,6 +38,9 @@ class TestFunctional:
     @pytest.mark.regression
     @pytest.mark.smoke
     def test_verify_high_low_price_sorting(self, setup):
+        """
+        Test to verify that items are sorted by price from High to Low on the inventory page.
+        """
         page = setup
         login_page = LoginPage(page)
         inventory_page = InventoryPage(page)
@@ -57,6 +63,9 @@ class TestFunctional:
     @pytest.mark.regression
     @pytest.mark.smoke
     def test_add_multiple_items_and_checkout(self, setup):
+        """
+        Test to verify that multiple items can be added to the cart and checked out successfully.
+        """
         page = setup
         login_page = LoginPage(page)
         inventory_page = InventoryPage(page)
@@ -89,6 +98,7 @@ class TestFunctional:
             login_page.login('standard_user', 'secret_sauce')
 
     def _capture_screenshot(self, page, filename):
+        """Helper method to capture and attach screenshots."""
         path = f"screenshots/{filename}"
         page.screenshot(path=path)
         allure.attach.file(path, name=filename.split('.')[0].replace('_', ' ').title(), attachment_type=allure.attachment_type.PNG)

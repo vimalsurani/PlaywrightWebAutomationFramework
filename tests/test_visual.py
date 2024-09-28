@@ -14,6 +14,7 @@ class TestVisual:
     @allure.story('Inventory Page Visual Comparison')
     @pytest.mark.visual
     def test_visual_inventory_page(self, setup, data_regression: DataRegressionFixture):
+        """Test for visual comparison of the inventory page."""
         page = setup
         login_page = LoginPage(page)
 
@@ -29,6 +30,7 @@ class TestVisual:
     @allure.story('Cart Page Visual Comparison')
     @pytest.mark.visual
     def test_visual_cart_page(self, setup, data_regression: DataRegressionFixture):
+        """Test for visual comparison of the cart page."""
         page = setup
         login_page = LoginPage(page)
 
@@ -46,6 +48,7 @@ class TestVisual:
     @pytest.mark.visual
     @pytest.mark.regression
     def test_visual_checkout_page(self, setup, data_regression: DataRegressionFixture):
+        """Test for visual comparison of the checkout page."""
         page = setup
         login_page = LoginPage(page)
         inventory_page = InventoryPage(page)
@@ -66,16 +69,19 @@ class TestVisual:
             self._perform_regression_check(data_regression, screenshot_path)
 
     def _login_to_application(self, login_page: LoginPage):
+        """Helper method to login to the application."""
         with allure.step("Login to the application"):
             login_page.login('standard_user', 'secret_sauce')
 
     def _capture_screenshot(self, page, filename: str):
+        """Capture a screenshot and return the path."""
         screenshot_path = self.BASE_SCREENSHOT_PATH / filename
         page.screenshot(path=str(screenshot_path))
         allure.attach.file(str(screenshot_path), name=filename.split('.')[0], attachment_type=allure.attachment_type.PNG)
         return str(screenshot_path)
 
     def _perform_regression_check(self, data_regression: DataRegressionFixture, screenshot_path: str):
+        """Perform data regression check on the screenshot."""
         try:
             data_regression.check(screenshot_path)
         except Exception as e:

@@ -7,6 +7,7 @@ class CartPage:
         self.checkout_button = "//button[@id='checkout']"
 
     def proceed_to_checkout(self):
+        """Proceed to the checkout page."""
         # Check if the checkout button is visible before clicking
         if self.page.is_visible(self.checkout_button):
             self.page.click(self.checkout_button)
