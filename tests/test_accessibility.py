@@ -1,3 +1,5 @@
+import allure
+import pytest
 from playwright.sync_api import Page
 from pages.cart_page import CartPage
 from pages.inventory_page import InventoryPage
@@ -5,16 +7,28 @@ from pages.inventory_page import InventoryPage
 
 class TestAccessibility:
 
+    @allure.feature('Accessibility Testing')
+    @allure.story('Inventory Page Accessibility Check')
+    @pytest.mark.accessibility
+    @pytest.mark.smoke
     def test_accessibility_inventory_page(self, login, setup: Page):
         page = setup
         self._check_accessibility(page, page.url)
 
+    @allure.feature('Accessibility Testing')
+    @allure.story('Cart Page Accessibility Check')
+    @pytest.mark.accessibility
+    @pytest.mark.regression
     def test_accessibility_cart_page(self, login, setup: Page):
         page = setup
         inventory_page = InventoryPage(page)
         inventory_page.go_to_cart()  # Navigate to Cart page
         self._check_accessibility(page, page.url)
 
+    @allure.feature('Accessibility Testing')
+    @allure.story('Checkout Page Accessibility Check')
+    @pytest.mark.accessibility
+    @pytest.mark.regression
     def test_accessibility_checkout_page(self, login, setup: Page):
         page = setup
         inventory_page = InventoryPage(page)
@@ -25,18 +39,22 @@ class TestAccessibility:
         self._check_accessibility(page, page.url)
 
     def _check_accessibility(self, page: Page, url: str):
-        page.goto(url)
+        with allure.step(f"Navigate to the page: {url}"):
+            page.goto(url)
 
-        self._inject_axe(page)
+        with allure.step("Inject axe-core for accessibility testing"):
+            self._inject_axe(page)
 
-        page.evaluate("axe.run().then(results => window.axeResults = results);")
-        results = page.evaluate("() => window.axeResults")
+        with allure.step("Run accessibility checks using axe-core"):
+            page.evaluate("axe.run().then(results => window.axeResults = results);")
+            results = page.evaluate("() => window.axeResults")
 
-        if results['violations']:
-            for violation in results['violations']:
-                print(f"Violation: {violation['description']} (Impact: {violation['impact']})")
-                print(f"  Tags: {violation['tags']}")
-                print(f"  Nodes: {violation['nodes']}")
+        with allure.step("Check and report accessibility violations"):
+            if results['violations']:
+                for violation in results['violations']:
+                    print(f"Violation: {violation['description']} (Impact: {violation['impact']})")
+                    print(f"  Tags: {violation['tags']}")
+                    print(f"  Nodes: {violation['nodes']}")
 
         assert len(results['violations']) == 0, f"Accessibility violations found: {results['violations']}"
 
