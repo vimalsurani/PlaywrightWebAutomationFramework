@@ -4,7 +4,6 @@ import pytest
 from pytest_regressions.data_regression import DataRegressionFixture
 from pages.inventory_page import InventoryPage
 from pages.login_page import LoginPage
-from pages.checkout_page import CheckoutPage
 
 
 class TestVisual:

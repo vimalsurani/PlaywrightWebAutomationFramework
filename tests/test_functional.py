@@ -12,6 +12,7 @@ class TestFunctional:
     @allure.story('Verify Z-A Sorting on Inventory Page')
     @pytest.mark.regression
     @pytest.mark.smoke
+    @pytest.mark.functional
     def test_verify_za_sorting(self, setup):
         """
         Test to verify that items are sorted in Z-A order on the inventory page.
@@ -37,6 +38,7 @@ class TestFunctional:
     @allure.story('Verify High to Low Price Sorting on Inventory Page')
     @pytest.mark.regression
     @pytest.mark.smoke
+    @pytest.mark.functional
     def test_verify_high_low_price_sorting(self, setup):
         """
         Test to verify that items are sorted by price from High to Low on the inventory page.
@@ -62,6 +64,7 @@ class TestFunctional:
     @allure.story('Add Multiple Items and Checkout')
     @pytest.mark.regression
     @pytest.mark.smoke
+    @pytest.mark.functional
     def test_add_multiple_items_and_checkout(self, setup):
         """
         Test to verify that multiple items can be added to the cart and checked out successfully.
