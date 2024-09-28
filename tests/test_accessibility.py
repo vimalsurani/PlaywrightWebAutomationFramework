@@ -1,4 +1,5 @@
 import allure
+import json
 import pytest
 from playwright.sync_api import Page
 from pages.cart_page import CartPage
@@ -51,6 +52,11 @@ class TestAccessibility:
 
         with allure.step("Check and report accessibility violations"):
             if results['violations']:
+                allure.attach(
+                    json.dumps(results['violations'], indent=4),
+                    name="Accessibility Violations",
+                    attachment_type=allure.attachment_type.JSON
+                )
                 for violation in results['violations']:
                     print(f"Violation: {violation['description']} (Impact: {violation['impact']})")
                     print(f"  Tags: {violation['tags']}")

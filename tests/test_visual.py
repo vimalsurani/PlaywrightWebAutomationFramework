@@ -1,10 +1,10 @@
 from pathlib import Path
-
 import allure
 import pytest
 from pytest_regressions.data_regression import DataRegressionFixture
 from pages.inventory_page import InventoryPage
 from pages.login_page import LoginPage
+from pages.checkout_page import CheckoutPage
 
 
 class TestVisual:
@@ -76,5 +76,8 @@ class TestVisual:
         return str(screenshot_path)
 
     def _perform_regression_check(self, data_regression: DataRegressionFixture, screenshot_path: str):
-        data_regression.check(screenshot_path)
-
+        try:
+            data_regression.check(screenshot_path)
+        except Exception as e:
+            allure.attach(f"Regression check failed: {str(e)}", name="Error", attachment_type=allure.attachment_type.TEXT)
+            raise

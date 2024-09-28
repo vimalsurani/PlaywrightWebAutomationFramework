@@ -1,5 +1,14 @@
 import pytest
+import allure
+from pathlib import Path
 from playwright.sync_api import Playwright, sync_playwright
+from pytest_regressions.data_regression import DataRegressionFixture
+
+# Create directories for the data regression files and screenshots if they don't exist
+data_dir = Path("data_regression")
+data_dir.mkdir(parents=True, exist_ok=True)
+screenshots_dir = Path("screenshots")
+screenshots_dir.mkdir(parents=True, exist_ok=True)
 
 
 @pytest.fixture(scope="session")
@@ -15,6 +24,8 @@ def launch_browser(playwright, headless: bool):
 def create_context(browser):
     return browser.new_context(
         no_viewport=True,
+        record_video_dir="videos/",
+        record_video_size={"width": 1280, "height": 720},
     )
 
 
@@ -35,6 +46,10 @@ def setup(playwright, request):
 
     yield page
 
+    # Attach video recording to Allure report
+    video_path = page.video.path()
+    allure.attach.file(video_path, name="Test Video", attachment_type=allure.attachment_type.WEBM)
+
     page.close()
     context.close()
     browser.close()
@@ -49,6 +64,15 @@ def login(setup):
 
     # Verify login was successful
     assert page.is_visible('.inventory_list'), "Login failed: Inventory page not visible."
+
+
+@pytest.fixture()
+def data_regression(request) -> DataRegressionFixture:
+    return DataRegressionFixture(
+        request=request,  # Pass request explicitly
+        datadir=data_dir,
+        original_datadir=data_dir
+    )
 
 
 def pytest_addoption(parser):
